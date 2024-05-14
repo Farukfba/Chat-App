@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyD2Z1ykiv7jfcKJeUwF_YmH5n-Ztpkup4M</string>
+	<string>AIzaSyBAi4hPJbo5LLU_Hv7TYUH2fEamqrjmOA8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>860114613839</string>
+	<string>730757142770</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.chatApp</string>
 	<key>PROJECT_ID</key>
-	<string>authen-29868</string>
+	<string>chat-app-fea6e</string>
 	<key>STORAGE_BUCKET</key>
-	<string>authen-29868.appspot.com</string>
+	<string>chat-app-fea6e.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:860114613839:ios:ea9bc5b63ccde67a025c3a</string>
+	<string>1:730757142770:ios:14bb14e8982d7d3a6ad86b</string>
 </dict>
 </plist>
