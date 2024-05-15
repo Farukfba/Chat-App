@@ -1,5 +1,7 @@
 import 'package:chat_app/consts.dart';
+import 'package:chat_app/services/alert_service.dart';
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/navigation_service.dart';
 import 'package:chat_app/widgets/custom_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -16,6 +18,8 @@ class _State extends State<LoginPage> {
   final GlobalKey<FormState> _loginFormKey = GlobalKey();
 
   late AuthService _authService;
+  late NavigationService _navigatorService;
+  late AlertService _alertService;
 
   String? email, password;
 
@@ -23,6 +27,8 @@ class _State extends State<LoginPage> {
   void initState() {
     super.initState();
     _authService = _getIt.get<AuthService>();
+    _navigatorService = _getIt.get<NavigationService>();
+    _alertService = _getIt.get<AlertService>();
   }
 
   @override
@@ -128,8 +134,14 @@ class _State extends State<LoginPage> {
           if (_loginFormKey.currentState?.validate() ?? false) {
             _loginFormKey.currentState?.save();
             bool result = await _authService.login(email!, password!);
-            print(result);
-            if (result) {} else {}
+            if (result) {
+              _navigatorService.pushReplacementNamed("/home");
+            } else {
+              _alertService.showToast(
+                text: "Failed to login, Please try again!",
+                icon: Icons.error,
+              );
+            }
           }
         },
         color: Theme.of(context).colorScheme.primary,
