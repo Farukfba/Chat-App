@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:chat_app/models/user_profile.dart';
+import 'package:chat_app/services/alert_service.dart';
+import 'package:chat_app/services/database%20service.dart';
 import 'package:chat_app/services/media%20service.dart';
 import 'package:chat_app/services/storage%20service.dart';
 import 'package:chat_app/widgets/custom_form_field.dart';
@@ -24,6 +27,8 @@ class _RegisterPageState extends State<RegisterPage> {
   late MediaService _mediaService;
   late NavigationService _navigationService;
   late StorageService _storageService;
+  late DatabaseService _databaseService;
+  late AlertService _alertService;
 
   String? email, password, name;
   File? selectedImage;
@@ -36,6 +41,8 @@ class _RegisterPageState extends State<RegisterPage> {
     _mediaService = _getIt.get<MediaService>();
     _navigationService = _getIt.get<NavigationService>();
     _storageService = _getIt.get<StorageService>();
+    _databaseService = _getIt.get<DatabaseService>();
+    _alertService = _getIt.get<AlertService>();
   }
 
   @override
@@ -196,10 +203,33 @@ class _RegisterPageState extends State<RegisterPage> {
                       file: selectedImage!,
                       uid: _authService.user!.uid,
                   );
+                  if (pfpURL != null) {
+                    await _databaseService.createUserProfile(
+                      userProfile:
+                      UserProfile(
+                          uid: _authService.user!.uid,
+                          name: name,
+                          pfpURL: pfpURL),
+                    );
+                    _alertService.showToast(
+                      text: "User registered successfully!",
+                      icon: Icons.error,
+                    );
+                    _navigationService.goBack();
+                    _navigationService.pushReplacementNamed("/home");
+                  } else {
+                    throw Exception("Unable to upload user profile picture");
+                  }
+                } else {
+                  throw Exception("Unable to register user");
                 }
               }
             } catch (e) {
               print(e);
+              _alertService.showToast(
+                text: "Failed to register, Please try again!",
+                icon: Icons.error,
+              );
             }
             setState(() {
               isLoading = false;
