@@ -94,8 +94,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> _sendMessage(ChatMessage chatMessage) async {
-    if (chatMessage.medias?.isEmpty ?? false) {
-      if (chatMessage.medias!.first.type == MessageType.Image) {
+    if (chatMessage.medias?.isNotEmpty ?? false) {
+      if (chatMessage.medias!.first.type == MediaType.image) {
         Message message = Message(
           senderID: chatMessage.user.id,
           content: chatMessage.medias!.first.url,
@@ -126,11 +126,26 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   List<ChatMessage> _generateChatMessagesList(List<Message> messages) {
-    List<ChatMessage> chatMessage = messages.map((m) { 
-      return ChatMessage(
-        user: m.senderID == currentUser!.id ? currentUser! : otherUser!,
-        text: m.content!,
-        createdAt: m.sentAt!.toDate(),);
+    List<ChatMessage> chatMessage = messages.map((m) {
+      if (m.messageType == MessageType.Image) {
+        return ChatMessage(
+          user: m.senderID == currentUser!.id ? currentUser! : otherUser!,
+          createdAt: m.sentAt!.toDate(),
+          medias: [
+            ChatMedia(
+              url: m.content!,
+              fileName: "",
+              type: MediaType.image,
+            ),
+          ],
+        );
+      } else {
+        return ChatMessage(
+          user: m.senderID == currentUser!.id ? currentUser! : otherUser!,
+          text: m.content!,
+          createdAt: m.sentAt!.toDate(),);
+      }
+
     },).toList();
     chatMessage.sort((a, b,) {
       return b.createdAt.compareTo(a.createdAt);
@@ -156,7 +171,8 @@ class _ChatPageState extends State<ChatPage> {
            ChatMessage chatMessage = ChatMessage(
              user: currentUser!,
              createdAt: DateTime.now(),
-             medias: [ChatMedia(
+             medias: [
+               ChatMedia(
                url: downloadURL,
                fileName: "",
                type: MediaType.image,
