@@ -16,14 +16,14 @@ class _HomePageState extends State<HomePage> {
   final GetIt _getIt = GetIt.instance;
 
   late AuthService _authService;
-  late NavigationService _navigatorService;
+  late NavigationService _navigationService;
   late AlertService _alertService;
 
   @override
   void initState() {
     super.initState();
     _authService = _getIt.get<AuthService>();
-    _navigatorService = _getIt.get<NavigationService>();
+    _navigationService = _getIt.get<NavigationService>();
     _alertService = _getIt.get<AlertService>();
   }
 
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                     text: "Successfully logout!",
                     icon: Icons.check,
                   );
-                  _navigatorService.pushReplacementNamed("/login");
+                  _navigationService.pushReplacementNamed("/login");
                 }
               },
             color: Colors.red,

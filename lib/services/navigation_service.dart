@@ -1,18 +1,19 @@
 import 'package:chat_app/pages/home_page.dart';
 import 'package:chat_app/pages/login_page.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:path/path.dart';
+import 'package:chat_app/pages/register%20page.dart';
+import 'package:flutter/material.dart';
 
 class NavigationService {
-  late GlobalKey<NavigatorState> _navigorKey;
+  late GlobalKey<NavigatorState> _navigatorKey;
 
   final Map<String, Widget Function(BuildContext)> _routes = {
     "/login": (context) => LoginPage(),
+    "/register": (context) => RegisterPage(),
     "/home": (context) => HomePage(),
   };
 
   GlobalKey<NavigatorState>? get navigatorKey {
-    return _navigorKey;
+    return _navigatorKey;
   }
 
   Map<String, Widget Function(BuildContext)> get routes {
@@ -20,18 +21,18 @@ class NavigationService {
   }
 
   NavigationService() {
-    _navigorKey = GlobalKey<NavigatorState>();
+    _navigatorKey = GlobalKey<NavigatorState>();
   }
 
   void pushNamed(String routeName) {
-    _navigorKey.currentState?.pushNamed(routeName);
+    _navigatorKey.currentState?.pushNamed(routeName);
   }
 
   void pushReplacementNamed(String routeName) {
-    _navigorKey.currentState?.pushReplacementNamed(routeName);
+    _navigatorKey.currentState?.pushReplacementNamed(routeName);
   }
 
   void goBack() {
-    _navigorKey.currentState?.pop();
+    _navigatorKey.currentState?.pop();
   }
 }

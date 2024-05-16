@@ -10,10 +10,10 @@ import 'navigation_service.dart';
 class AlertService {
   final GetIt _getIt = GetIt.instance;
 
-  late NavigationService _navigatorService;
+  late NavigationService _navigationService;
 
   AlertService() {
-    _navigatorService = _getIt.get<NavigationService>();
+    _navigationService = _getIt.get<NavigationService>();
   }
 
   void showToast({
@@ -41,7 +41,7 @@ class AlertService {
           );
         }
       ).show(
-        _navigatorService.navigatorKey!.currentContext!,
+        _navigationService.navigatorKey!.currentContext!,
       );
     } catch (e) {
       print(e);
