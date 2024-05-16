@@ -1,4 +1,6 @@
+import 'package:chat_app/models/message.dart';
 import 'package:chat_app/models/user_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -59,8 +61,18 @@ class _ChatPageState extends State<ChatPage> {
         alwaysShowSend: true,
       ),
       currentUser: currentUser!,
-      onSend: (message) {},
+      onSend: _sendMessage,
       messages: [],
+    );
+  }
+
+  Future<void> _sendMessage(ChatMessage chatMessage) async {
+    Message message = Message(
+      senderID: currentUser!.id,
+      content: chatMessage.text,
+      messageType: MessageType.Text,
+      sentAt: Timestamp.fromDate(chatMessage.createdAt,
+      ),
     );
   }
 }
