@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app/models/message.dart';
 import 'package:chat_app/models/user_profile.dart';
+import 'package:chat_app/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
@@ -93,18 +94,35 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> _sendMessage(ChatMessage chatMessage) async {
-    Message message = Message(
-      senderID: currentUser!.id,
-      content: chatMessage.text,
-      messageType: MessageType.Text,
-      sentAt: Timestamp.fromDate(chatMessage.createdAt,
-      ),
-    );
-    await _databaseService.sendChatMessage(
-      currentUser!.id,
-      otherUser!.id,
-      message,
-    );
+    if (chatMessage.medias?.isEmpty ?? false) {
+      if (chatMessage.medias!.first.type == MessageType.Image) {
+        Message message = Message(
+          senderID: chatMessage.user.id,
+          content: chatMessage.medias!.first.url,
+          messageType: MessageType.Image,
+          sentAt: Timestamp.fromDate(chatMessage.createdAt),
+        );
+        await _databaseService.sendChatMessage(
+          currentUser!.id,
+          otherUser!.id,
+          message,
+        );
+      }
+    } else {
+      Message message = Message(
+        senderID: currentUser!.id,
+        content: chatMessage.text,
+        messageType: MessageType.Text,
+        sentAt: Timestamp.fromDate(chatMessage.createdAt,
+        ),
+      );
+      await _databaseService.sendChatMessage(
+        currentUser!.id,
+        otherUser!.id,
+        message,
+      );
+    }
+
   }
 
   List<ChatMessage> _generateChatMessagesList(List<Message> messages) {
@@ -126,7 +144,27 @@ class _ChatPageState extends State<ChatPage> {
       onPressed: () async{
        File? file = await _mediaService.getImageFromGallery();
        if (file != null) {
-
+         String chatID = generateChatID(
+           uid1: currentUser!.id,
+           uid2: otherUser!.id,
+         );
+         String? downloadURL = await _storageService.uploadImageToChat(
+           file: file,
+           chatID: chatID,
+         );
+         if (downloadURL != null) {
+           ChatMessage chatMessage = ChatMessage(
+             user: currentUser!,
+             createdAt: DateTime.now(),
+             medias: [ChatMedia(
+               url: downloadURL,
+               fileName: "",
+               type: MediaType.image,
+             ),
+             ],
+           );
+           _sendMessage(chatMessage);
+         }
        }
       },
       icon: Icon(
