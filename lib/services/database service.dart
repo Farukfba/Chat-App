@@ -89,4 +89,12 @@ class DatabaseService {
       },
     );
   }
+  Stream<DocumentSnapshot<Chat>> getChatData(String uid1, String uid2) {
+    String chatID = generateChatID(
+        uid1: uid1,
+        uid2: uid2
+    );
+    return _chatsCollection?.doc(chatID).snapshots()
+    as Stream<DocumentSnapshot<Chat>>;
+  }
 }
